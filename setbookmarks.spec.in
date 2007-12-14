@@ -1,0 +1,39 @@
+Summary: Sets your Favorite applications
+Name: setbookmarks
+Version: @VERSION@
+Release: 1
+License: GPL
+Group: System/Tools
+URL: http://code.google.com/p/loolixbodes/
+Source0: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+This tool saves a directory of .desktop files into your Favorites
+menu.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+
+%files
+%defattr(-,root,root,-)
+%doc
+%{_bindir}/*
+%{_datadir}/applications/*.desktop
+
+%changelog
+* Thu Dec 13 2007 jacob berkman <jberkman@novell.com>
+- Initial build.
+

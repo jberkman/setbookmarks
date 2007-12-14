@@ -1,0 +1,45 @@
+#                                               -*- Autoconf -*-
+dnl Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.61)
+AC_INIT([setbookmarks],[0.1],[jberkman@novell.com])
+AM_INIT_AUTOMAKE([foreign])
+AC_CONFIG_SRCDIR([setbookmarks.c])
+AC_CONFIG_HEADER([config.h])
+AM_MAINTAINER_MODE
+
+# Honor aclocal flags
+ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
+
+pkg_modules="glib-2.0 >= 2.12"
+pkg_modules_compat="glib-2.0 >= 2.8"
+PKG_CHECK_MODULES(PACKAGE, [$pkg_modules],[],[
+	PKG_CHECK_MODULES(PACKAGE, [$pkg_modules_compat],[AC_DEFINE([NEED_GBOOKMARK], 1, [if glib doesn't supply gbookmark])])])
+AC_SUBST(PACKAGE_CFLAGS)
+AC_SUBST(PACKAGE_LIBS)
+
+AC_ISC_POSIX
+AC_PROG_CC
+AM_PROG_CC_STDC
+AM_PROG_CC_C_O
+AM_PROG_LIBTOOL
+
+# Make libtool use --silent when --silent is passed to make
+changequote(,)dnl
+LIBTOOL="${LIBTOOL} \$(shell echo \"\$(MFLAGS)\" | awk '/^[^ ]*s/ { print \"--silent\" }')"
+changequote([,])dnl
+
+AC_HEADER_STDC
+
+GETTEXT_PACKAGE=setbookmarks
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
+AM_GLIB_GNU_GETTEXT
+IT_PROG_INTLTOOL([0.35.0])
+
+AC_CONFIG_FILES([
+setbookmarks.spec
+Makefile
+po/Makefile.in
+])
+AC_OUTPUT
